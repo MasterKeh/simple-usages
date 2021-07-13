@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using SUs.KeepLatest.Cli.DataAccess;
 
 namespace SUs.KeepLatest.Cli
 {
@@ -6,6 +7,8 @@ namespace SUs.KeepLatest.Cli
     {
         static int Main(string[] args)
         {
+            ApplicationDbMigrator.MigrateAsync().Wait();
+
             return RootCommandBuilder.Build().InvokeAsync(args).Result;
         }
     }
