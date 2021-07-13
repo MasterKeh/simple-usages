@@ -122,6 +122,9 @@ $tf/
 # Guidance Automation Toolkit
 *.gpState
 
+# Rider is a fast & powerful cross-platform .NET IDE
+.idea
+
 # ReSharper is a .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper
