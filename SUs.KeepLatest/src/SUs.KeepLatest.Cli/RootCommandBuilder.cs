@@ -159,7 +159,7 @@ namespace SUs.KeepLatest.Cli
 
         private static void RegisterCommandFetch(Command command)
         {
-            var commandFetch = new Command("fetch", "Fetch each item's version");
+            Command commandFetch = new("fetch", "Fetch each item's version");
             commandFetch.Handler = CommandHandler.Create(async () =>
             {
                 var consoleTable = new ConsoleTable("Name", "Version", "Latest Version");
