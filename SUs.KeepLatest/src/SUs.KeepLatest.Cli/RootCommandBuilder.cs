@@ -213,8 +213,8 @@ namespace SUs.KeepLatest.Cli
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(htmlContent);
-                var releaseNode = htmlDocument.DocumentNode.SelectSingleNode("//div[contains(@class,'release')]");
-                var assetNodes = releaseNode.SelectNodes("//details/div[contains(@class,'Box')]//div[contains(@class, 'd-flex')]");
+                var releaseNode = htmlDocument.DocumentNode.SelectSingleNode("//div[@id='repo-content-pjax-container']");
+                var assetNodes = releaseNode.SelectNodes("div//div[@class='Box-footer']//details//ul/li");
 
                 var consoleTable = new ConsoleTable("Index", "File", "Size");
                 var files = new (string Name, string Url)[assetNodes.Count];
@@ -223,8 +223,8 @@ namespace SUs.KeepLatest.Cli
                     var node = assetNodes[i];
                     var aNode = node.SelectSingleNode("a");
                     var url = aNode.Attributes["href"].Value;
-                    var fileName = aNode.ChildNodes["span"].InnerText;
-                    var size = node.SelectSingleNode("small").InnerText;
+                    var fileName = aNode.InnerText.Trim().Replace("\r", string.Empty).Replace("\n", string.Empty);
+                    var size = node.SelectSingleNode("span")?.InnerText.Trim();
 
                     consoleTable.AddRow(i + 1, fileName, size);
                     files[i] = (fileName, url);
@@ -232,9 +232,19 @@ namespace SUs.KeepLatest.Cli
 
                 consoleTable.Write();
 
-                var releaseVersion = releaseNode.SelectSingleNode("div//svg[contains(@class,'octicon-tag')]").ParentNode.Attributes["title"].Value;
-                Console.Write($" Version: {releaseVersion}");
-                var releaseTime = releaseNode.SelectSingleNode("div[contains(@class,'release-main-section')]/div[@class='release-header']//relative-time").Attributes["datetime"].Value;
+                var releaseVersionNode = releaseNode.SelectSingleNode("div//div[@data-pjax='#repo-content-pjax-container']//svg[contains(@class,'octicon-tag')]").NextSibling;
+                var releaseVersion = string.Empty;
+                while (releaseVersionNode != null)
+                {
+                    if (releaseVersionNode.Name.Equals("span", StringComparison.OrdinalIgnoreCase))
+                    {
+                        releaseVersion = releaseVersionNode.InnerText;
+                    }
+
+                    releaseVersionNode = releaseVersionNode.NextSibling;
+                }
+                Console.Write($" Version: {releaseVersion.Trim()}");
+                var releaseTime = releaseNode.SelectSingleNode("div//div[@data-pjax='#repo-content-pjax-container']//relative-time").Attributes["datetime"].Value;
                 Console.WriteLine($" - released at {DateTime.Parse(releaseTime).ToLocalTime()}");
                 Console.WriteLine();
 
