@@ -243,6 +243,8 @@ namespace SUs.KeepLatest.Cli
 
                     releaseVersionNode = releaseVersionNode.NextSibling;
                 }
+                releaseVersion = releaseVersion?.Trim();
+
                 Console.Write($" Version: {releaseVersion.Trim()}");
                 var releaseTime = releaseNode.SelectSingleNode("div//div[@data-pjax='#repo-content-pjax-container']//relative-time").Attributes["datetime"].Value;
                 Console.WriteLine($" - released at {DateTime.Parse(releaseTime).ToLocalTime()}");
