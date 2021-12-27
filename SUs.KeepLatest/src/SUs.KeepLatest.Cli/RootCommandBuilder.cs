@@ -107,7 +107,6 @@ namespace SUs.KeepLatest.Cli
 
                 _ = await db.SaveChangesAsync();
 
-
                 Console.WriteLine($"{name} updated.");
             });
 
@@ -245,7 +244,7 @@ namespace SUs.KeepLatest.Cli
                 }
                 releaseVersion = releaseVersion?.Trim();
 
-                Console.Write($" Version: {releaseVersion.Trim()}");
+                Console.Write($" Version: {releaseVersion}");
                 var releaseTime = releaseNode.SelectSingleNode("div//div[@data-pjax='#repo-content-pjax-container']//relative-time").Attributes["datetime"].Value;
                 Console.WriteLine($" - released at {DateTime.Parse(releaseTime).ToLocalTime()}");
                 Console.WriteLine();
